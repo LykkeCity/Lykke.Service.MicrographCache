@@ -16,6 +16,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\src\Lykke.Service.MicrographCache.Contracts\FeedHoursHistory.cs" Link="Models\FeedHoursHistory.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.2.0" />
     <PackageReference Include="AutoMapper" Version="6.2.2" />
     <PackageReference Include="Lykke.Common" Version="3.0.0" />
@@ -25,10 +29,6 @@
   <ItemGroup>
     <Folder Include="AutorestClient\" />
     <Folder Include="Models\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Lykke.Service.MicrographCache.Contracts\Lykke.Service.MicrographCache.Contracts.csproj" />
   </ItemGroup>
 
 </Project>

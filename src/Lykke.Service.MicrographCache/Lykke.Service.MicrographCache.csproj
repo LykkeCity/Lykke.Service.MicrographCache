@@ -19,6 +19,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="..\Lykke.Service.MicrographCache.Contracts\FeedHoursHistory.cs" Link="Contracts\FeedHoursHistory.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -53,9 +57,12 @@
   
   <ItemGroup>
     <ProjectReference Include="..\Lykke.Service.MicrographCache.AzureRepositories\Lykke.Service.MicrographCache.AzureRepositories.csproj" />
-    <ProjectReference Include="..\Lykke.Service.MicrographCache.Contracts\Lykke.Service.MicrographCache.Contracts.csproj" />
     <ProjectReference Include="..\Lykke.Service.MicrographCache.Core\Lykke.Service.MicrographCache.Core.csproj" />
     <ProjectReference Include="..\Lykke.Service.MicrographCache.Services\Lykke.Service.MicrographCache.Services.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Folder Include="Contracts\" />
   </ItemGroup>
 
   <Target Name="PrepublishScript" BeforeTargets="PrepareForPublish">

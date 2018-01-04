@@ -18,7 +18,7 @@ namespace Lykke.Service.MicrographCache.Controllers
         [HttpGet("{assetPairId}")]
         public async Task<FeedHoursHistory> Get(string assetPairId)
         {
-            return await _historyService.Get(assetPairId);
+            return new FeedHoursHistory { Changes = await _historyService.Get(assetPairId) };
         }
     }
 }

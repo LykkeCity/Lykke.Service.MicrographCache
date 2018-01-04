@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
-using Lykke.Service.MicrographCache.Contracts;
 using Lykke.Service.MicrographCache.Core.Repositories;
 using Lykke.Service.MicrographCache.Core.Services;
 using Lykke.Service.MicrographCache.Services.Extensions;
@@ -21,9 +22,9 @@ namespace Lykke.Service.MicrographCache.Services
             _cacheExpiration = cacheExpiration;
         }
 
-        public async Task<FeedHoursHistory> Get(string assetPairId)
+        public async Task<double[]> Get(string assetPairId)
         {
-            return await _distributedCache.TryGetFromCache($"feed:{assetPairId}:history", async () => FeedHoursHistoryExt.ToDto(assetPairId, await _feedHoursHistoryRepository.GetAsync(assetPairId)), _cacheExpiration);
+            return await _distributedCache.TryGetFromCache($"feed:{assetPairId}:history", async () => (await _feedHoursHistoryRepository.GetAsync(assetPairId)).Split(';').Select(x => double.Parse(x, CultureInfo.InvariantCulture)).ToArray(), _cacheExpiration);
         }
     }
 }
