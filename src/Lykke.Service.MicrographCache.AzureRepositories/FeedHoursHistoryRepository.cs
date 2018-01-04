@@ -35,7 +35,7 @@ namespace Lykke.Service.MicrographCache.AzureRepositories
         {
             var entity = await _tableStorage.GetDataAsync(FeedHoursHistoryEntity.GeneratePartition(),
                 FeedHoursHistoryEntity.GenerateRowKey(assetPairId));
-            return entity.Data;
+            return entity?.Data ?? "0";
         }
     }
 }
