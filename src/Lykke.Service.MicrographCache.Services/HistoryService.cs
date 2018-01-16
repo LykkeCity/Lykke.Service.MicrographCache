@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Lykke.Service.MicrographCache.Core.Repositories;
@@ -9,7 +10,7 @@ namespace Lykke.Service.MicrographCache.Services
     public class HistoryService : IHistoryService
     {
         private readonly IFeedHoursHistoryRepository _feedHoursHistoryRepository;
-        private Dictionary<string, double[]> _cache;
+        private ConcurrentDictionary<string, double[]> _cache;
 
         public HistoryService(IFeedHoursHistoryRepository feedHoursHistoryRepository)
         {
@@ -33,7 +34,7 @@ namespace Lykke.Service.MicrographCache.Services
 
         public async Task UpdateCacheAsync()
         {
-            _cache = await _feedHoursHistoryRepository.GetAllAsync();
+            _cache = new ConcurrentDictionary<string, double[]>(await _feedHoursHistoryRepository.GetAllAsync());
         }
 
         private double[] GetDataFromCache(string assetPair)
