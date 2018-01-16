@@ -1,30 +1,44 @@
 ﻿using System;
-using System.Globalization;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Lykke.Service.MicrographCache.Core.Repositories;
 using Lykke.Service.MicrographCache.Core.Services;
-using Lykke.Service.MicrographCache.Services.Extensions;
-using Microsoft.Extensions.Caching.Distributed;
 
 namespace Lykke.Service.MicrographCache.Services
 {
     public class HistoryService : IHistoryService
     {
-        private readonly IDistributedCache _distributedCache;
         private readonly IFeedHoursHistoryRepository _feedHoursHistoryRepository;
-        private readonly TimeSpan _cacheExpiration;
+        private Dictionary<string, double[]> _cache;
 
-        public HistoryService(IDistributedCache distributedCache, IFeedHoursHistoryRepository feedHoursHistoryRepository, TimeSpan cacheExpiration)
+        public HistoryService(IFeedHoursHistoryRepository feedHoursHistoryRepository)
         {
-            _distributedCache = distributedCache;
             _feedHoursHistoryRepository = feedHoursHistoryRepository;
-            _cacheExpiration = cacheExpiration;
         }
 
-        public async Task<double[]> Get(string assetPairId)
+        public double[] Get(string assetPairId)
         {
-            return await _distributedCache.TryGetFromCache($"feed:{assetPairId}:history", async () => (await _feedHoursHistoryRepository.GetAsync(assetPairId)).Split(';').Select(x => double.Parse(x, CultureInfo.InvariantCulture)).ToArray(), _cacheExpiration);
+            return  GetDataFromCache(assetPairId);
+        }
+
+        public Dictionary<string, double[]> Get(string[] assetPairIds)
+        {
+            var result = new Dictionary<string, double[]>();
+
+            foreach (string assetPair in assetPairIds)
+                result.Add(assetPair, GetDataFromCache(assetPair));
+
+            return result;
+        }
+
+        public async Task UpdateCacheAsync()
+        {
+            _cache = await _feedHoursHistoryRepository.GetAllAsync();
+        }
+
+        private double[] GetDataFromCache(string assetPair)
+        {
+            return _cache.ContainsKey(assetPair) ? _cache[assetPair] : Array.Empty<double>();
         }
     }
 }

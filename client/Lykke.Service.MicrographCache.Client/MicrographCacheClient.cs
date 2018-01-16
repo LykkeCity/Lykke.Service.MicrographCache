@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using AutoMapper;
-using Common.Log;
 using Lykke.Service.MicrographCache.Client.AutorestClient;
 using Lykke.Service.MicrographCache.Contracts;
 
@@ -16,17 +16,22 @@ namespace Lykke.Service.MicrographCache.Client
             _micrographCache = new MicrographCacheAPI(new Uri(serviceUrl));
         }
 
-        public async Task<FeedHoursHistory> Get(string assetPairId)
+        public async Task<FeedHoursHistory> GetAsync(string assetPairId)
         {
             return Mapper.Map<FeedHoursHistory>(await _micrographCache.ApiHistoryByAssetPairIdGetAsync(assetPairId));
         }
 
+        public async Task<Dictionary<string, double[]>> GetAsync(string[] assetPairIds)
+        {
+            return Mapper.Map<Dictionary<string, double[]>>(await _micrographCache.ApiHistoryAssetPairsPostAsync(assetPairIds));
+        }
+
         public void Dispose()
         {
-            //if (_service == null)
-            //    return;
-            //_service.Dispose();
-            //_service = null;
+            if (_micrographCache == null)
+                return;
+            _micrographCache.Dispose();
+            _micrographCache = null;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Lykke.Service.MicrographCache.Contracts;
 using Lykke.Service.MicrographCache.Core.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -16,9 +16,15 @@ namespace Lykke.Service.MicrographCache.Controllers
         }
 
         [HttpGet("{assetPairId}")]
-        public async Task<FeedHoursHistory> Get(string assetPairId)
+        public FeedHoursHistory Get(string assetPairId)
         {
-            return new FeedHoursHistory { Changes = await _historyService.Get(assetPairId) };
+            return new FeedHoursHistory { Changes = _historyService.Get(assetPairId) };
+        }
+        
+        [HttpPost("assetPairs")]
+        public Dictionary<string, double[]> Get([FromBody]string[] assetPairIds)
+        {
+            return _historyService.Get(assetPairIds);
         }
     }
 }
