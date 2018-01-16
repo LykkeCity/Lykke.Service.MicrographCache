@@ -12,9 +12,9 @@ namespace Lykke.Service.MicrographCache.PeriodicalHandlers
 
         public CacheUpdaterHandler(
             IHistoryService historyService,
-            TimeSpan cacheExpiration,
+            TimeSpan cacheUpdateInterval,
             ILog log) :
-            base(nameof(CacheUpdaterHandler), (int)cacheExpiration.TotalMilliseconds, log)
+            base(nameof(CacheUpdaterHandler), (int)cacheUpdateInterval.TotalMilliseconds, log)
         {
             _historyService = historyService;
         }

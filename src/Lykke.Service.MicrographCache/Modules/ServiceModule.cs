@@ -40,18 +40,9 @@ namespace Lykke.Service.MicrographCache.Modules
             builder.RegisterType<ShutdownManager>()
                 .As<IShutdownManager>();
 
-            builder.RegisterType<HistoryService>().As<IHistoryService>()
-                .WithParameter(TypedParameter.From(_settings.CurrentValue.RedisSettings.CacheExpiration))
+            builder.RegisterType<HistoryService>()
+                .As<IHistoryService>()
                 .SingleInstance();
-
-
-            var redis = new RedisCache(new RedisCacheOptions
-            {
-                Configuration = _settings.CurrentValue.RedisSettings.RedisConfiguration,
-                InstanceName = _settings.CurrentValue.RedisSettings.InstanceName
-            });
-
-            builder.RegisterInstance(redis).As<IDistributedCache>().SingleInstance();
 
             builder.RegisterInstance<IFeedHoursHistoryRepository>(
                 new FeedHoursHistoryRepository(
@@ -60,7 +51,7 @@ namespace Lykke.Service.MicrographCache.Modules
             builder.RegisterType<CacheUpdaterHandler>()
                 .As<IStartable>()
                 .AutoActivate()
-                .WithParameter(TypedParameter.From(_settings.CurrentValue.RedisSettings.CacheExpiration))
+                .WithParameter(TypedParameter.From(_settings.CurrentValue.CacheUpdateInterval))
                 .SingleInstance();
         }        
     }
