@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AzureStorage;
@@ -31,11 +33,24 @@ namespace Lykke.Service.MicrographCache.AzureRepositories
             _tableStorage = tableStorage;
         }
 
-        public async Task<string> GetAsync(string assetPairId)
+        public async Task<double[]> GetAsync(string assetPairId)
         {
             var entity = await _tableStorage.GetDataAsync(FeedHoursHistoryEntity.GeneratePartition(),
                 FeedHoursHistoryEntity.GenerateRowKey(assetPairId));
-            return entity?.Data ?? "0";
+
+            return GetData(entity);
+        }
+
+        public async Task<Dictionary<string, double[]>> GetAllAsync()
+        {
+            var entities = await _tableStorage.GetDataAsync(FeedHoursHistoryEntity.GeneratePartition());
+
+            return entities.ToDictionary(entity => entity.RowKey, GetData);
+        }
+
+        private static double[] GetData(FeedHoursHistoryEntity entity)
+        {
+            return entity?.Data?.Split(';').Select(x => double.Parse(x, CultureInfo.InvariantCulture)).ToArray() ?? Array.Empty<double>();
         }
     }
 }

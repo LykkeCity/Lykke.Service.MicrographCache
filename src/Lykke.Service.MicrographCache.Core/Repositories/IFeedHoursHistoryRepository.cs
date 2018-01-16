@@ -1,9 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Lykke.Service.MicrographCache.Core.Repositories
 {
     public interface IFeedHoursHistoryRepository
     {
-        Task<string> GetAsync(string assetPairId);
+        Task<double[]> GetAsync(string assetPairId);
+        Task<Dictionary<string, double[]>> GetAllAsync();
     }
 }
