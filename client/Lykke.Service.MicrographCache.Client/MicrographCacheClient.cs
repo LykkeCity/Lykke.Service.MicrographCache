@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 using AutoMapper;
 using Lykke.Service.MicrographCache.Client.AutorestClient;
@@ -8,12 +9,12 @@ using Lykke.Service.MicrographCache.Contracts;
 namespace Lykke.Service.MicrographCache.Client
 {
     public class MicrographCacheClient : IMicrographCacheClient, IDisposable
-    {        
+    {
         private MicrographCacheAPI _micrographCache;
 
         public MicrographCacheClient(string serviceUrl)
         {
-            _micrographCache = new MicrographCacheAPI(new Uri(serviceUrl));
+            _micrographCache = new MicrographCacheAPI(new Uri(serviceUrl), new HttpClient());
         }
 
         public async Task<FeedHoursHistory> GetAsync(string assetPairId)
