@@ -19,10 +19,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="appsettings.json" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Include="..\Lykke.Service.MicrographCache.Contracts\FeedHoursHistory.cs" Link="Contracts\FeedHoursHistory.cs" />
   </ItemGroup>
   
